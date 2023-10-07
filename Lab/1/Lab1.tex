@@ -1,0 +1,47 @@
+\documentclass{article}
+
+\usepackage[tmargin=0.3in,bmargin=0.25in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{enumerate,enumitem}
+
+\title{CSCI 330 Lab 1}
+\author{Isaac Boaz}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+    \item \begin{enumerate}[label=\alph*.]
+              \item False. All keys are necessarily a super key.
+              \item True.
+              \item False. Each \textbf{column} is called an attribute.
+              \item False. \textbf{Rows} are known as tuples.
+              \item True.
+              \item True.
+              \item True.
+              \item True.
+          \end{enumerate}
+    \item \begin{tabular}{|c|c|c|}
+              \hline
+              X & Y & Z   \\
+              \hline
+              3 & 5 & 100 \\
+              \hline
+          \end{tabular}
+    \item \begin{equation*}
+              \sigma_{building=\text{Taylor}}(department) \bowtie \sigma_{salary>=80000}(instructor)
+          \end{equation*}
+    \item \begin{equation*}
+              \sigma_{Category=\text{Electronics}\land Price>500}(Product)
+          \end{equation*}
+    \item \begin{equation*}
+              \Pi_{CustomerName, PhoneNumber}(Customers)
+          \end{equation*}
+    \item \begin{equation*}
+              \Pi_{CustomerName, Address}((\sigma_{Quantity>10}(OrderDetails) \bowtie Orders) \bowtie Customers)
+          \end{equation*}
+\end{enumerate}
+
+\end{document}
