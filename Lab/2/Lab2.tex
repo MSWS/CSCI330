@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\usepackage[tmargin=0.3in,bmargin=0.25in]{geometry}
+\usepackage[tmargin=0.5in,bmargin=0.25in]{geometry}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{listings}
 \usepackage{multicol}
@@ -13,19 +13,122 @@
 \maketitle
 
 \lstset{
-    language=sql
+    language=sql,
+    basicstyle=\small,
+    showstringspaces=false
 }
 
-\begin{enumerate}
-    \item
-          \begin{lstlisting}
-SELECT DISTINCT course.* FROM course WHERE
+\begin{lstlisting}
+1. SELECT DISTINCT course.* FROM course, section WHERE
     (section.year = 2010 AND section.semester = "Spring") OR
     (section.year = 2009 AND section.semester = "Fall") AND
     section.course_id = course.course_id;
 \end{lstlisting}
-    \item 
-    \item a
-\end{enumerate}
+\begin{lstlisting}
+    +-----------+----------------------------+------------+---------+
+    | course_id | title                      | dept_name  | credits |
+    +-----------+----------------------------+------------+---------+
+    | BIO-101   | Intro. to Biology          | Biology    |       4 |
+    | BIO-301   | Genetics                   | Biology    |       4 |
+    | BIO-399   | Computational Biology      | Biology    |       3 |
+    | CS-101    | Intro. to Computer Science | Comp. Sci. |       4 |
+    | CS-190    | Game Design                | Comp. Sci. |       4 |
+    | CS-315    | Robotics                   | Comp. Sci. |       3 |
+    | CS-319    | Image Processing           | Comp. Sci. |       3 |
+    | CS-347    | Database System Concepts   | Comp. Sci. |       3 |
+    | EE-181    | Intro. to Digital Systems  | Elec. Eng. |       3 |
+    | FIN-201   | Investment Banking         | Finance    |       3 |
+    | HIS-351   | World History              | History    |       3 |
+    | MU-199    | Music Video Production     | Music      |       3 |
+    | PHY-101   | Physical Principles        | Physics    |       4 |
+    +-----------+----------------------------+------------+---------+        
+    \end{lstlisting}
+\begin{lstlisting}
+2. SELECT name, salary FROM instructor WHERE salary = (SELECT MAX(
+    salary) FROM instructor);
+    \end{lstlisting}
+\begin{lstlisting}
+    +----------+----------+
+    | name     | salary   |
+    +----------+----------+
+    | Einstein | 95000.00 |
+    +----------+----------+
+    \end{lstlisting}
 
+\begin{lstlisting}
+3. SELECT dept_name,budget FROM department WHERE budget > 42000;
+\end{lstlisting}
+
+\begin{lstlisting}
+    +------------+-----------+
+    | dept_name  | budget    |
+    +------------+-----------+
+    | Biology    |  90000.00 |
+    | Comp. Sci. | 100000.00 |
+    | Elec. Eng. |  85000.00 |
+    | Finance    | 120000.00 |
+    | History    |  50000.00 |
+    | Music      |  80000.00 |
+    | Physics    |  70000.00 |
+    +------------+-----------+
+\end{lstlisting}
+
+\pagebreak
+
+\begin{lstlisting}
+4. SELECT dept_name, MAX(salary) FROM instructor GROUP BY (dept_name);
+\end{lstlisting}
+\begin{lstlisting}
+    +------------+-------------+
+    | dept_name  | MAX(salary) |
+    +------------+-------------+
+    | Biology    |    72000.00 |
+    | Comp. Sci. |    92000.00 |
+    | Elec. Eng. |    80000.00 |
+    | Finance    |    90000.00 |
+    | History    |    62000.00 |
+    | Music      |    40000.00 |
+    | Physics    |    95000.00 |
+    +------------+-------------+
+\end{lstlisting}
+\begin{lstlisting}
+5. SELECT DISTINCT name FROM student,takes WHERE student.ID = tak
+es.ID AND course_id LIKE "CS-%";
+\end{lstlisting}
+\begin{lstlisting}
+    +----------+
+    | name     |
+    +----------+
+    | Zhang    |
+    | Shankar  |
+    | Levy     |
+    | Williams |
+    | Brown    |
+    | Bourikas |
+    +----------+
+\end{lstlisting}
+\begin{lstlisting}
+6. SELECT sec_id, COUNT(*) FROM takes   
+    WHERE semester = "Spring" AND year = 2009 GROUP BY (sec_id);
+\end{lstlisting}
+\begin{lstlisting}
+    +--------+----------+
+    | sec_id | COUNT(*) |
+    +--------+----------+
+    | 1      |        1 |
+    | 2      |        2 |
+    +--------+----------+
+\end{lstlisting}
+\begin{lstlisting}
+7. SELECT sec_id, COUNT(*) FROM takes 
+    WHERE semester = "Spring" AND year = 2009
+    GROUP BY (sec_id) ORDER BY COUNT(*) DESC LIMIT 1;
+\end{lstlisting}
+\begin{lstlisting}
+    +--------+----------+
+    | sec_id | COUNT(*) |
+    +--------+----------+
+    | 2      |        2 |
+    +--------+----------+
+\end{lstlisting}
 \end{document}
