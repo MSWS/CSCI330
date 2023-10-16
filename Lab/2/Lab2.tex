@@ -1,0 +1,31 @@
+\documentclass{article}
+
+\usepackage[tmargin=0.3in,bmargin=0.25in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{enumerate,enumitem}
+
+\title{CSCI 330 Lab 2}
+\author{Isaac Boaz}
+
+\begin{document}
+\maketitle
+
+\lstset{
+    language=sql
+}
+
+\begin{enumerate}
+    \item
+          \begin{lstlisting}
+SELECT DISTINCT course.* FROM course WHERE
+    (section.year = 2010 AND section.semester = "Spring") OR
+    (section.year = 2009 AND section.semester = "Fall") AND
+    section.course_id = course.course_id;
+\end{lstlisting}
+    \item 
+    \item a
+\end{enumerate}
+
+\end{document}
