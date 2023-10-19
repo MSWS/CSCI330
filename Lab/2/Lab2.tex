@@ -44,8 +44,8 @@
     +-----------+----------------------------+------------+---------+        
     \end{lstlisting}
 \begin{lstlisting}
-2. SELECT name, salary FROM instructor WHERE salary = (SELECT MAX(
-    salary) FROM instructor);
+2. SELECT name,salary FROM instructor 
+    WHERE salary = (SELECT MAX(salary) FROM instructor);
     \end{lstlisting}
 \begin{lstlisting}
     +----------+----------+
@@ -56,21 +56,22 @@
     \end{lstlisting}
 
 \begin{lstlisting}
-3. SELECT dept_name,budget FROM department WHERE budget > 42000;
+3. SELECT department.dept_name, AVG(salary) FROM
+    department, instructor WHERE instructor.dept_name = department.dept_name
+    GROUP BY (department.dept_name) HAVING AVG(salary) > 42000;
 \end{lstlisting}
 
 \begin{lstlisting}
-    +------------+-----------+
-    | dept_name  | budget    |
-    +------------+-----------+
-    | Biology    |  90000.00 |
-    | Comp. Sci. | 100000.00 |
-    | Elec. Eng. |  85000.00 |
-    | Finance    | 120000.00 |
-    | History    |  50000.00 |
-    | Music      |  80000.00 |
-    | Physics    |  70000.00 |
-    +------------+-----------+
+    +------------+--------------+
+    | dept_name  | avg(salary)  |
+    +------------+--------------+
+    | Biology    | 72000.000000 |
+    | Comp. Sci. | 77333.333333 |
+    | Elec. Eng. | 80000.000000 |
+    | Finance    | 85000.000000 |
+    | History    | 61000.000000 |
+    | Physics    | 91000.000000 |
+    +------------+--------------+    
 \end{lstlisting}
 
 \pagebreak
@@ -92,8 +93,8 @@
     +------------+-------------+
 \end{lstlisting}
 \begin{lstlisting}
-5. SELECT DISTINCT name FROM student,takes WHERE student.ID = tak
-es.ID AND course_id LIKE "CS-%";
+5. SELECT DISTINCT name FROM student,takes
+    WHERE student.ID = takes.ID AND course_id LIKE "CS-%";
 \end{lstlisting}
 \begin{lstlisting}
     +----------+
@@ -108,27 +109,35 @@ es.ID AND course_id LIKE "CS-%";
     +----------+
 \end{lstlisting}
 \begin{lstlisting}
-6. SELECT sec_id, COUNT(*) FROM takes   
-    WHERE semester = "Spring" AND year = 2009 GROUP BY (sec_id);
+6. SELECT course_id, sec_id, COUNT(*) FROM takes
+    WHERE semester = "Spring" AND year = 2009 GROUP BY course_id,sec_id;
 \end{lstlisting}
 \begin{lstlisting}
-    +--------+----------+
-    | sec_id | COUNT(*) |
-    +--------+----------+
-    | 1      |        1 |
-    | 2      |        2 |
-    +--------+----------+
+    +-----------+--------+----------+
+    | course_id | sec_id | COUNT(*) |
+    +-----------+--------+----------+
+    | CS-190    | 2      |        2 |
+    | EE-181    | 1      |        1 |
+    +-----------+--------+----------+    
 \end{lstlisting}
 \begin{lstlisting}
-7. SELECT sec_id, COUNT(*) FROM takes 
+7. SELECT course_id, sec_id, COUNT(*) FROM takes 
     WHERE semester = "Spring" AND year = 2009
-    GROUP BY (sec_id) ORDER BY COUNT(*) DESC LIMIT 1;
+    GROUP BY course_id, sec_id ORDER BY COUNT(*) DESC LIMIT 1;
 \end{lstlisting}
 \begin{lstlisting}
-    +--------+----------+
-    | sec_id | COUNT(*) |
-    +--------+----------+
-    | 2      |        2 |
-    +--------+----------+
+    +-----------+--------+----------+
+    | course_id | sec_id | COUNT(*) |
+    +-----------+--------+----------+
+    | CS-190    | 2      |        2 |
+    +-----------+--------+----------+
+\end{lstlisting}
+\begin{lstlisting}
+8. DELETE FROM course 
+    WHERE course_id NOT IN 
+    (SELECT course_id FROM section);
+\end{lstlisting}
+\begin{lstlisting}
+    Query OK, 1 row affected (0.015 sec)
 \end{lstlisting}
 \end{document}
