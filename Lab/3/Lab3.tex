@@ -1,0 +1,54 @@
+\documentclass{article}
+
+\usepackage[tmargin=0.5in,bmargin=0.25in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{enumerate,enumitem}
+
+\title{CSCI 330 Lab 3}
+\author{Isaac Boaz}
+
+\begin{document}
+\maketitle
+
+\lstset{
+    language=SQL,
+    basicstyle=\small,
+    showstringspaces=false
+}
+
+\begin{lstlisting}
+1. SELECT DISTINCT Name FROM Track
+    WHERE Name LIKE 'Z%'
+    ORDER BY Name;\end{lstlisting}
+
+\begin{lstlisting}
+2. SELECT Emp.FirstName FROM Employee AS Emp
+    JOIN Employee AS Boss
+    ON Emp.ReportsTo = Boss.EmployeeId
+        AND Emp.BirthDate < Boss.BirthDate
+    ORDER BY Emp.FirstName;
+\end{lstlisting}
+
+\begin{lstlisting}
+3. SELECT Name FROM Track
+    WHERE UnitPrice = (
+        SELECT MAX(UnitPrice) FROM Track
+    ) ORDER BY Name;
+\end{lstlisting}
+
+\begin{lstlisting}
+4. SELECT Customer.CustomerId, Customer.LastName, SUM(Total)
+    FROM Invoice JOIN Customer
+    ON Invoice.CustomerId = Customer.CustomerId
+    GROUP BY Customer.CustomerId;
+\end{lstlisting}
+
+\begin{lstlisting}
+5. SELECT Title, SUM(UnitPrice) FROM Album
+    JOIN Track ON Track.AlubmId = Album.AlbumId
+    GROUP BY Album.AlbumId
+    ORDER BY SUM(UnitPrice) DESC LIMIT 1;
+\end{lstlisting}
+\end{document}
