@@ -5,6 +5,7 @@
 \usepackage{listings}
 \usepackage{multicol}
 \usepackage{enumerate,enumitem}
+\usepackage[utf8]{inputenc}
 
 \title{CSCI 330 Lab 3}
 \author{Isaac Boaz}
@@ -22,13 +23,37 @@
 1. SELECT DISTINCT Name FROM Track
     WHERE Name LIKE 'Z%'
     ORDER BY Name;\end{lstlisting}
-
+\begin{lstlisting}
+    +---------------+
+    | Name          |
+    +---------------+
+    | Zambacao      |
+    | Ze Trindade   |
+    | Zeca Violeiro |
+    | Zero          |
+    | ZeroVinteUm   |
+    | Zither        |
+    | Zombie Eaters |
+    | Zoo Station   |
+    | Zooropa       |
+    +---------------+
+\end{lstlisting}
 \begin{lstlisting}
 2. SELECT Emp.FirstName FROM Employee AS Emp
     JOIN Employee AS Boss
     ON Emp.ReportsTo = Boss.EmployeeId
         AND Emp.BirthDate < Boss.BirthDate
     ORDER BY Emp.FirstName;
+\end{lstlisting}
+\begin{lstlisting}
+    +-----------+
+    | FirstName |
+    +-----------+
+    | Laura     |
+    | Margaret  |
+    | Nancy     |
+    | Robert    |
+    +-----------+
 \end{lstlisting}
 
 \begin{lstlisting}
@@ -39,16 +64,160 @@
 \end{lstlisting}
 
 \begin{lstlisting}
+    +-------------------------------------------+
+    | Name                                      |
+    +-------------------------------------------+
+    | "?"                                       |
+    | ...And Found                              |
+    | ...In Translation                         |
+    | .07%                                      |
+    | A Benihana Christmas, Pts. 1 & 2          |
+    | A Day In the Life                         |
+    | A Measure of Salvation                    |
+    | ...                                       |
+    | War of the Gods, Pt. 2                    |
+    | What Kate Did                             |
+    | Whatever the Case May Be                  |
+    | White Rabbit                              |
+    | Women's Appreciation                      |
+    +-------------------------------------------+
+    213 rows in set (0.006 sec)
+\end{lstlisting}
+
+\begin{lstlisting}
 4. SELECT Customer.CustomerId, Customer.LastName, SUM(Total)
-    FROM Invoice JOIN Customer
+    FROM Invoice LEFT JOIN Customer
     ON Invoice.CustomerId = Customer.CustomerId
-    GROUP BY Customer.CustomerId;
+    GROUP BY Customer.CustomerId
+    ORDER BY SUM(Total) DESC;
+\end{lstlisting}
+
+\begin{lstlisting}
+    +------------+---------------+------------+
+    | CustomerId | LastName      | SUM(Total) |
+    +------------+---------------+------------+
+    |          6 | Holy          |      49.62 |
+    |         26 | Cunningham    |      47.62 |
+    |         57 | Rojas         |      46.62 |
+    |         45 | Kovacs        |      45.62 |
+    |         46 | O'Reilly      |      45.62 |
+    |         28 | Barnett       |      43.62 |
+    |         24 | Ralston       |      43.62 |
+    |         37 | Zimmermann    |      43.62 |
+    |         25 | Stevens       |      42.62 |
+    |          7 | Gruber        |      42.62 |
+    |         44 | Hamalainen    |      41.62 |
+    |         48 | Van der Berg  |      40.62 |
+    |         43 | Mercier       |      40.62 |
+    |          5 | Wichterlova   |      40.62 |
+    |         42 | Girard        |      39.62 |
+    |          1 | Goncalves     |      39.62 |
+    |         34 | Fernandes     |      39.62 |
+    |         20 | Miller        |      39.62 |
+    |          4 | Hansen        |      39.62 |
+    |         22 | Leacock       |      39.62 |
+    |          3 | Tremblay      |      39.62 |
+    |         17 | Smith         |      39.62 |
+    |         39 | Bernard       |      38.62 |
+    | ...                                     |
+    |         36 | Schneider     |      37.62 |
+    |         56 | Gutierrez     |      37.62 |
+    |         27 | Gray          |      37.62 |
+    |          8 | Peeters       |      37.62 |
+    |         29 | Brown         |      37.62 |
+    |         11 | Rocha         |      37.62 |
+    |         54 | Murray        |      37.62 |
+    |         33 | Sullivan      |      37.62 |
+    |         18 | Brooks        |      37.62 |
+    |         13 | Ramos         |      37.62 |
+    |          2 | Kohler        |      37.62 |
+    |         53 | Hughes        |      37.62 |
+    |         52 | Jones         |      37.62 |
+    |         59 | Srivastava    |      36.64 |
+    +------------+---------------+------------+
+    59 rows in set (0.002 sec)
 \end{lstlisting}
 
 \begin{lstlisting}
 5. SELECT Title, SUM(UnitPrice) FROM Album
-    JOIN Track ON Track.AlubmId = Album.AlbumId
+    JOIN Track ON Track.AlbumId = Album.AlbumId
     GROUP BY Album.AlbumId
     ORDER BY SUM(UnitPrice) DESC LIMIT 1;
+\end{lstlisting}
+\begin{lstlisting}
+    +---------------+----------------+
+    | Title         | SUM(UnitPrice) |
+    +---------------+----------------+
+    | Greatest Hits |          56.43 |
+    +---------------+----------------+
+    1 row in set (0.007 sec)
+\end{lstlisting}
+
+\begin{lstlisting}
+6. SELECT Title FROM Album
+    JOIN Track ON Album.AlbumId = Track.AlbumId
+    LEFT JOIN InvoiceLine ON InvoiceLine.TrackId = Track.TrackId
+    GROUP BY (Album.AlbumId) 
+    HAVING COUNT(InvoiceLineId) = 0
+    ORDER BY Title;
+\end{lstlisting}
+\begin{lstlisting}[xleftmargin=-0.22in]
++-------------------------------------------------------------------------------+
+| Title                                                                         |
++-------------------------------------------------------------------------------+
+| A Copland Celebration, Vol. I                                                 |
+| A Soprano Inspired                                                            |
+| Adorate Deum: Gregorian Chant from the Proper of the Mass                     |
+| Allegri: Miserere                                                             |
+| Armada: Music from the Courts of England and Spain                            |
+| Bach: Goldberg Variations                                                     |
+| Bach: Toccata & Fugue in D Minor                                              |
+| Bach: Violin Concertos                                                        |
+| Battlestar Galactica: The Story So Far                                        |
+| Beethoven: Symhonies Nos. 5 & 6                                               |
+| Bizet: Carmen Highlights                                                      |
+| Cake: B-Sides and Rarities                                                    |
+| Carmina Burana                                                                |
+| Charpentier: Divertissements, Airs & Concerts                                 |
+| Great Opera Choruses                                                          |
+| Great Performances - Barber's Adagio and Other Romantic Favorites for Strings |
+| Great Recordings of the Century - Mahler: Das Lied von der Erde               |
+| Great Recordings of the Century - Shubert: Schwanengesang, 4 Lieder           |
+| Great Recordings of the Century: Paganini's 24 Caprices                       |
+| Handel: Music for the Royal Fireworks (Original Version 1749)                 |
+| Koyaanisqatsi (Soundtrack from the Motion Picture)                            |
+| Locatelli: Concertos for Violin, Strings and Continuo, Vol. 3                 |
+| Mascagni: Cavalleria Rusticana                                                |
+| Monteverdi: L'Orfeo                                                           |
+| Mozart Gala: Famous Arias                                                     |
+| Mozart: Chamber Music                                                         |
+| Mozart: Wind Concertos                                                        |
+| Palestrina: Missa Papae Marcelli & Allegri: Miserere                          |
+| Pavarotti's Opera Made Easy                                                   |
+| Prokofiev: Symphony No.1                                                      |
+| Prokofiev: Symphony No.5 & Stravinksy: Le Sacre Du Printemps                  |
+| Puccini: Madama Butterfly - Highlights                                        |
+| Quiet Songs                                                                   |
+| Realize                                                                       |
+| SCRIABIN: Vers la flamme                                                      |
+| Sir Neville Marriner: A Celebration                                           |
+| Strauss: Waltzes                                                              |
+| Tchaikovsky: The Nutcracker                                                   |
+| The Best of Beethoven                                                         |
+| The Last Night of the Proms                                                   |
+| The Ultimate Relexation Album                                                 |
+| Vivaldi: The Four Seasons                                                     |
+| Worlds                                                                        |
++-------------------------------------------------------------------------------+
+43 rows in set (0.019 sec)
+\end{lstlisting}
+\begin{lstlisting}
+7. CREATE VIEW CustomerInvoice AS
+    SELECT FirstName, LastName, SUM(Invoice.Total) FROM Customer
+    JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId
+    GROUP BY Customer.CustomerId;
+\end{lstlisting}
+\begin{lstlisting}
+    Query OK, 0 rows affected (0.015 sec)
 \end{lstlisting}
 \end{document}
