@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\usepackage{listings}
+
+\title{\vspace{-5em}CSCI 330 Midterm Corrections}
+\author{Isaac Boaz}
+
+\begin{document}
+\maketitle
+
+\subsection*{Question 7}
+I originally \lstinline|GROUPED BY| only the \lstinline|Company.company_id| without realizing that created ambiguity between what \lstinline|company_name| to use per group.
+The corrected query would be:
+
+\begin{lstlisting}[language=SQL]
+    SELECT company_name, SUM(salary)
+    FROM Company JOIN Works 
+    ON Works.company_id = Company.company_id 
+    GROUP BY Company.company_id, Company.company_name 
+    ORDER BY SUM(Works.salary) ASC LIMIT 1;
+\end{lstlisting}
+
+\subsection*{Question 8}
+I think I did not realize that the question asked for \textit{managers} to get a 10-percent raise.
+The corrected query would be:
+
+\begin{lstlisting}[language=SQL]
+    UPDATE Works SET salary = salary * 1.10 
+    WHERE employee_id IN (
+        SELECT Works.employee_id
+        FROM Works 
+        JOIN Company ON Company.company_id = Works.company_id
+        JOIN Manages ON Works.employee_id = Manages.manager_id
+        WHERE Company.company_name = "First Bank Corporation"
+    );
+\end{lstlisting}
+
+\subsection*{Problem 10}
+I misunderstood the question, which was asking for the second-degree users and how many followers they have, rather than how many people they follow.
+The corrected query would be:
+\begin{lstlisting}[language=SQL]
+    SELECT F1.follower, COUNT(DISTINCT F2.follower) AS num
+    FROM Follow F1
+    JOIN Follow F2 ON F1.follower = F2.followee
+    WHERE F1.follower IN (
+        SELECT followee FROM Follow
+    )
+    GROUP BY F1.follower
+    ORDER BY F1.follower;
+\end{lstlisting}
+
+\end{document}

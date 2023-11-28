@@ -1,0 +1,89 @@
+\documentclass{article}
+
+\usepackage[letterpaper]{geometry}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{multirow}
+
+\title{CSCI 330 Project Report}
+\author{Isaac Boaz}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+From the source code, we can observe that the front-end has no knowledge of the back-end implementation. For all it cares, the back-end could be throwing away the data and returning random values.
+The benefit in this case is our back-end could be a flat-file system, a mongodb database, an SQL server, or any other data system.
+Rather than being tightly coupled with implementation, the front-end interacts with the back-end using a RESTful API, with PUT, GET, DELETE, and POST requests.
+
+\vspace{1em}
+
+\begin{tabular}{|c|c|l|}
+    \hline
+    \multicolumn{3}{|c|}{\textbf{Task Blueprint}}                \\
+    Field    & Type          & Description                       \\
+    \hline
+    \_id?    & string / null & The id of the task                \\
+    text     & string        & The text of the task              \\
+    day      & string        & The day the task is due           \\
+    reminder & boolean       & Whether or not to remind the user \\
+    \hline
+\end{tabular}
+
+\begin{itemize}
+    \item \textbf{CREATE} - \textit{POST /tasks} Inserts a new \textbf{Task} \\
+          \textbf{Returns}
+          A JSON object under the \lstinline|result| key with the \textbf{Task} with \textit{\_id} populated. \\
+    \item \textbf{READ} - \textit{GET /tasks/(id)} Fetches a specific \textbf{task} or (if unspecified) all \textbf{tasks} \\
+          \textbf{Returns}
+          A JSON array under the \lstinline|result| key, if ID was specified then the task that matches it will be in the array, if no task matches, it will be empty.
+    \item \textbf{UPDATE} - \textit{PUT /tasks/\textless id\textgreater} Toggles the given task's reminder boolean \\
+          \textbf{Returns}
+          A JSON object under the \lstinline|result| key with the updated \textbf{Task}. \\
+    \item \textbf{DELETE} - \textit{DELETE /tasks/\textless id\textgreater} Deletes the given task \\
+          \textbf{Returns}
+          A JSON object with \lstinline|result| mapped to a boolean.
+\end{itemize}
+
+\pagebreak
+
+\section{Implementation}
+The workflow for the front-end app is simple.
+
+\begin{itemize}
+    \item When the application loads:
+          \begin{enumerate}
+              \item The application sends a GET request to the back-end for all tasks.
+              \item The application generates a list of tasks from the response.
+          \end{enumerate}
+    \item When a user wishes to make a task:
+          \begin{enumerate}
+              \item The application gathers the necessary information. (Text, Day, Reminder)
+              \item The application sends a POST request to the back-end with the information.
+              \item The application maintains an internal list of tasks, and adds the new task to the list.
+          \end{enumerate}
+    \item When a user double clicks a task:
+          \begin{enumerate}
+              \item The application sends a PUT request to the back-end with the task's ID.
+              \item The application maintains an internal list of tasks, and toggles the reminder boolean of the task.
+              \item The application updates the UI to reflect the change.
+          \end{enumerate}
+    \item When a user wishes to delete a task:
+          \begin{enumerate}
+              \item The application sends a DELETE request to the back-end with the task's ID.
+              \item The application maintains an internal list of tasks, and removes the task from the list.
+              \item The application updates the UI to reflect the change.
+          \end{enumerate}
+\end{itemize}
+
+\section{Differences}
+\begin{itemize}
+    \item \textbf{Error Handling}: The MongoDB implementation will safely reject invalid requests (null / missing text or malformed data types) whereas the MySQL implementation will internally crash and requires the user to restart the server.
+    \item \textbf{Metadata}: MongoDB returns additional metadata about each task, such as the \textit{createdAt}, \textit{updatedAt}, and \textit{\_\_v} fields.
+    \item \textbf{Boolean Types}: MongoDB has a boolean type, whereas MySQL does not. MySQL uses an integer type to represent boolean values.
+    \item \textbf{Security}: One additional consideration is that each type of backend handles injection / malicious input differently.
+    \item \textbf{IDs}: MongoDB returns a 24-character ID per task created, whereas MySQL returns a 36-character UUID.
+\end{itemize}
+
+\end{document}
